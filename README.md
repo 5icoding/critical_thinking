@@ -6,4 +6,4 @@ the app about cultivate critical thinking
 
 # 工作日志
 1. 2024-03-07  完成vue-ui axum-api 的框架搭建 上传
-2.
+2. 2024-03-09  axum-api window运行成功（版本问题）；增加axios，axum-api 跨域访问
