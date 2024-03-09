@@ -1,10 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
 
-defineProps({
-  msg: String,
-})
+
+defineProps<{ msg: string }>()
 
 const count = ref(0)
 
@@ -25,13 +24,13 @@ function getData(){
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
+    
     <button type="button" @click="getData()">get data from end</button>
     <p>
       Edit
       <code>components/HelloWorld.vue</code> to test HMR
     </p>
   </div>
-
 
 </template>
 
