@@ -11,6 +11,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/reg',
         name: 'Reg',
         component: () => import('../views/reg.vue')
+    },
+    {
+        path: '/pdf',
+        name: 'Pdf',
+        component: () => import('../views/pdf.vue')
+    },
+    {
+        path: '/pdf2',
+        name: 'Pdf2',
+        component: () => import('../views/pdf2.vue')
     }
 ]
 
