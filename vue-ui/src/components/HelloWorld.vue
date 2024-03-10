@@ -27,8 +27,9 @@ function getData(){
     
     <button type="button" @click="getData()">get data from end</button>
     <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
+      “四个关系”：人与自我、人与他人、人与社会、人与自然之间的关系。<br/>
+      “五个层面”：时代、社会、生活、人文、哲理五个层面。<br/>
+      哲理思辨题、人与自然题、价值观念题、诗词格言题、文化现象题、生活情景题。
     </p>
   </div>
 

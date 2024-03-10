@@ -27,8 +27,81 @@ use axum::{
 };
 use tower_http::cors::CorsLayer;
 
+use sea_orm::{
+    Database,
+    DatabaseConnection,
+    ActiveValue,
+    ActiveModelTrait,
+    EntityTrait
+};
+
+use tokio::time::Duration;
+
+pub mod entity;
+
+use entity::user::ActiveModel as UserModel;
+
+use entity::user::Entity as UserDao;
+
+use chrono::Local;
+
+
+
+// use core::time::Duration;
+// use std::time::Duration;
+// use tokio::time::Duration;
+
+// use tracing::log::LevelFilter;
+// use tracing::metadata::LevelFilter;
+// use tracing_subscriber::filter::LevelFilter;
+
 #[tokio::main]
 async fn main() {
+
+    let db: DatabaseConnection = Database::connect("mysql://root:123456@127.0.0.1:3306/test").await.unwrap();
+
+    let user: UserModel =  UserModel{
+        id: ActiveValue::NotSet,
+        username: ActiveValue::Set("你好".to_owned()),
+        birthday: ActiveValue::Set(Some(Local::now().naive_local())),
+        sex: ActiveValue::Set(Some("1".to_owned())),
+        address: ActiveValue::Set(Some("address".to_owned())),
+    };
+    let result = user.insert(&db).await.unwrap();
+    println!("插入成功！：{:?}",result);
+
+    let option = UserDao::find_by_id(50).one(&db).await.unwrap();
+    match option {
+        None => {}
+        Some(user) => println!("查询成功！：{:?}",user)
+    }
+
+    // 一个个handler
+    async fn html()-> Html<&'static str>{
+
+        Html("<p>Hello, World!</p>")
+    }
+
+    // let mut opt = ConnectOptions::new("mysql://root:root@127.0.0.1:3306/sites");
+    // opt.max_connections(100)
+    //     .min_connections(5)
+    //     .connect_timeout(Duration::from_secs(8))
+    //     .acquire_timeout(Duration::from_secs(8))
+    //     .idle_timeout(Duration::from_secs(8))
+    //     .max_lifetime(Duration::from_secs(8))
+    //     // .sqlx_logging(true)
+    //     // .sqlx_logging_level(log::LevelFilter::Info)
+    //     .set_schema_search_path("my_schema"); // Setting default PostgreSQL schema
+
+    // let _db = Database::connect(opt).await;
+
+    // // 设置全局日志级别为 info
+    // let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"))
+    // //单独设置sea_orm
+    // .add_directive("sea_orm::driver=debug".parse().unwrap())
+    // //关闭sqlx自带的日志
+    // .add_directive("sqlx::query=off".parse().unwrap());
+
     // build our application with a single route
 
     let app = Router::new()
@@ -52,10 +125,7 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 
-    // 一个个handler
-    async fn html()-> Html<&'static str>{
-        Html("<p>Hello, World!</p>")
-    }
+
 
     // 返回json格式
     async fn json() -> Json<Vec<String>> {
